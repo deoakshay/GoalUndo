@@ -57,21 +57,49 @@ TEST(GoalUndoTest, check_goalPoppedifnoOperations)
 {
   GoalUndo gu;
   gu.addOperation("sqaure","horizontalline");
-  gu.addOperation("sqaure","90degrees");
-  gu.addOperation("square","vertical line");
+  gu.addOperation("90degrees");
+  gu.addOperation("vertical line");
   gu.undoOperation();
   gu.undoOperation();
-  gu.undoOperation();
-  ASSERT_EQ("",gu.getGoal());
   gu.undoOperation();
   ASSERT_EQ("",gu.getGoal());
 }
-
+TEST(GoalUndoTest, check_ifCorrectOperation_returned)
+{
+  GoalUndo gu;
+	gu.addOperation("painting","theme");
+	gu.addOperation("canvas");
+	gu.addOperation("colors");
+	gu.addOperation("photograph","camera");
+	gu.addOperation("lighting");
+	gu.addOperation("painting","brush");
+	gu.addOperation("water");
+	ASSERT_EQ("brush water",gu.getOperations());
+}
 TEST(GoalUndoTest, check_ifAllOperationsReturned)
 {
   GoalUndo gu;
   gu.addOperation("sqaure","horizontalline");
-  gu.addOperation("sqaure","90degrees");
-  gu.addOperation("square","verticalline");
+  gu.addOperation("90degrees");
+  gu.addOperation("verticalline");
   ASSERT_EQ("horizontalline 90degrees verticalline",gu.getOperations());
+}
+TEST(GoalUndoTest, check_ifAllOperationsReturned_part2)
+{
+  GoalUndo gu;
+  gu.addOperation("sqaure","horizontalline");
+  gu.addOperation("90degrees");
+  gu.addOperation("verticalline");
+  ASSERT_EQ("horizontalline 90degrees verticalline",gu.getOperations());
+	gu.addOperation("house","blueprints");
+	gu.addOperation("location");
+	ASSERT_EQ("blueprints location",gu.getOperations());
+}
+
+TEST(GoalUndoTest, check_emptyUndo)
+{
+	GoalUndo gu;
+	gu.undoGoal();
+	ASSERT_EQ("",gu.getOperations());
+
 }

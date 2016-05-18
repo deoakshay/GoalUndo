@@ -67,9 +67,6 @@ TEST(GoalUndoTest, check_goalPoppedifnoOperations)
 TEST(GoalUndoTest, check_ifCorrectOperation_returned)
 {
   GoalUndo gu;
-	gu.addOperation("painting","theme");
-	gu.addOperation("canvas");
-	gu.addOperation("colors");
 	gu.addOperation("photograph","camera");
 	gu.addOperation("lighting");
 	gu.addOperation("painting","brush");
@@ -96,10 +93,40 @@ TEST(GoalUndoTest, check_ifAllOperationsReturned_part2)
 	ASSERT_EQ("blueprints location",gu.getOperations());
 }
 
-TEST(GoalUndoTest, check_emptyUndo)
+TEST(GoalUndoTest, check_emptyUndo_goal)
 {
 	GoalUndo gu;
 	gu.undoGoal();
+	ASSERT_EQ("",gu.getOperations());
+
+}
+TEST(GoalUndoTest,check_undoOperation_parameterized)
+{
+	GoalUndo gu;
+	gu.addOperation("photograph","camera");
+	gu.addOperation("lighting");
+	gu.addOperation("lighting");
+	gu.addOperation("lighting");
+	gu.addOperation("lighting");
+	gu.undoOperation("lighting");
+	ASSERT_EQ("camera lighting lighting lighting",gu.getOperations());
+	gu.addOperation("painting","brush");
+	gu.addOperation("water");
+	gu.addOperation("water");
+	gu.addOperation("brush");
+	gu.undoOperation("brush");
+	ASSERT_EQ("brush water water",gu.getOperations());
+	gu.undoOperation("brush");
+	ASSERT_EQ("water water",gu.getOperations());
+	gu.undoOperation("water");
+	gu.undoOperation("water");
+	gu.undoOperation("brush");
+ASSERT_EQ("",gu.getOperations());
+}
+TEST(GoalUndoTest, check_emptyUndo_operation)
+{
+	GoalUndo gu;
+	gu.undoOperation();
 	ASSERT_EQ("",gu.getOperations());
 
 }
